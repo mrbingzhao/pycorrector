@@ -1,5 +1,5 @@
 FROM centos:7
-MAINTAINER XuMing "xuming624@qq.com"
+MAINTAINER uu "liubz"
 
 RUN  yum -y install python36
 RUN  yum -y install git boost-devel boost-test boost zlib bzip2 xz cmake make
