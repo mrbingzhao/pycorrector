@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  ml_centos7:
+    image: mrbingzhao/ml_centos7.py38
+    command: python3 /root/Server/CorrectServer.py
+    ports:
+      - "9080:9080"
+    volumes:
+#      - /mnt/disk2/Server/models/.cache:/root/.cache
+#      - /mnt/disk2/Server/examples:/root/Server
+      - /Users/liubingzhao/Documents/workspaces/python_ws/nlp/pycorrector/models/.cache:/root/.cache
+      - /Users/liubingzhao/Documents/workspaces/python_ws/nlp/pycorrector/examples:/root/Server
+    deploy:
+      resources:
+        limits:
+          cpus: '8.00'
+          memory: 16G

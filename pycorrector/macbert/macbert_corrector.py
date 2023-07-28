@@ -80,14 +80,18 @@ class MacBertCorrector(object):
             probs = torch.max(torch.softmax(ids, dim=-1), dim=-1)[0].cpu().numpy()
             decode_tokens = ''
             for i in range(len(decode_tokens_old)):
-                if probs[i + 1] >= threshold:
-                    if verbose:
-                        logger.debug(
-                            f"word: {decode_tokens_old[i]}, prob: {probs[i + 1]}, new word: {decode_tokens_new[i]}")
-                    decode_tokens += decode_tokens_new[i]
+                # 保留空格、换行等特殊字符的格式，不进行纠错
+                if decode_tokens_old[i] in {' ', '\n'}:
+                    decode_tokens.append(decode_tokens_old[i])
                 else:
-                    decode_tokens += decode_tokens_old[i]
-            corrected_text = decode_tokens[:len(text)]
+                    if probs[i + 1] >= threshold:
+                        if verbose:
+                            logger.debug(
+                                f"word: {decode_tokens_old[i]}, prob: {probs[i + 1]}, new word: {decode_tokens_new[i]}")
+                        decode_tokens += decode_tokens_new[i]
+                    else:
+                        decode_tokens += decode_tokens_old[i]
+                corrected_text = decode_tokens[:len(text)]
             corrected_text, sub_details = get_errors(corrected_text, text)
             text_new += corrected_text
             sub_details = [(i[0], i[1], idx + i[2], idx + i[3]) for i in sub_details]
@@ -164,3 +168,4 @@ if __name__ == "__main__":
     for sent, r in zip(error_sentences, res):
         print("original sentence:{} => {} err:{}".format(sent, r[0], r[1]))
     print('[batch]spend time:', time.time() - t2)
+

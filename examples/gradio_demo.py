@@ -75,4 +75,4 @@ if __name__ == '__main__':
         description="Copy or input error Chinese text. Submit and the machine will correct text.",
         article="Link to <a href='https://github.com/shibing624/pycorrector' style='color:blue;' target='_blank\'>Github REPO</a>",
         examples=examples
-    ).launch()
+    ).launch(share=False,server_port=9080)
